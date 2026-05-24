@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  sonarqube:
+    image: sonarqube:7.9-community
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+    networks:
+      - clinicsonarnet
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+    volumes:
+      - clinic_sonarqube_conf:/opt/sonarqube/conf
+      - clinic_sonarqube_data:/opt/sonarqube/data
+      - clinic_sonarqube_extensions:/opt/sonarqube/extensions
+
+  db:
+    image: postgres:11.1
+    networks:
+      - clinicsonarnet
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - clinic_postgresql:/var/lib/postgresql
+      - clinic_postgresql_data:/var/lib/postgresql/data
+
+networks:
+  clinicsonarnet:
+    driver: bridge
+
+volumes:
+  clinic_sonarqube_conf:
+  clinic_sonarqube_data:
+  clinic_sonarqube_extensions:
+  clinic_postgresql:
+  clinic_postgresql_data:

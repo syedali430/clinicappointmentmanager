@@ -1,0 +1,4 @@
+target/
+failed-gui-tests/
+*.log
+*.class
